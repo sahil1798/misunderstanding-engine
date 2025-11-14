@@ -5,6 +5,8 @@ from ai_integrations.openrouter_client import OpenRouterAnalyzer
 from ai_integrations.lingodev_client import LingoDevClient
 
 load_dotenv()
+# Add after load_dotenv()
+print(f"🔑 API Key loaded: {os.getenv('OPENROUTER_API_KEY')[:20]}..." if os.getenv('OPENROUTER_API_KEY') else "❌ No API key found!")
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
@@ -60,6 +62,12 @@ def analyze():
         language_info = lingodev.detect_language(text) if lingodev else {"language": "en"}
         print(f"   └─ Language: {language_info.get('language', 'en')}")
 
+        # Step 1.5: Translation to English (LingoDev)
+        print("🌍 Translating text to English for standardized analysis...")
+        source_lang = language_info.get("language", "en")
+        translated_text = lingodev.translate_text(text, "en") if lingodev else text
+        print(f"   └─ Translated text: {translated_text[:100]}...")
+
         # Step 2: Emotion analysis (OpenRouter)
         print("2️⃣ Analyzing emotions...")
         emotion_analysis = openrouter.analyze_emotion(text)
@@ -85,7 +93,12 @@ def analyze():
         print(f"   └─ Improvement ready")
 
         # Step 6: Cultural context (LingoDev)
-        cultural_context = lingodev.get_cultural_context(text) if lingodev else {}
+        cultural_context = lingodev.get_cultural_context(
+            text=translated_text,
+            source_lang=source_lang,
+            target_lang="en",
+            emotions=emotion_analysis.get("emotions_detected", [])
+        )
 
         # Calculate risk level
         risk_level = "HIGH" if ambiguity_score >= 7 else "MEDIUM" if ambiguity_score >= 4 else "LOW"
@@ -97,6 +110,7 @@ def analyze():
         response = {
             'status': 'success',
             'original_text': text,
+            'translated_text': translated_text,
             'language_info': language_info,
             'emotion_analysis': {
                 'primary_emotion': emotion_analysis.get('primary_emotion', 'neutral'),
