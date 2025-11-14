@@ -1,0 +1,11 @@
+{
+  "DEFAULT": {"anger": 1.0, "joy": 1.0, "optimism": 1.0, "sadness": 1.0},
+  "JP": {"anger": 0.7, "joy": 0.8, "optimism": 0.9, "sadness": 1.1},
+  "US": {"anger": 1.2, "joy": 1.1, "optimism": 1.0, "sadness": 0.9},
+  "IN": {"anger": 1.0, "joy": 1.0, "optimism": 1.0, "sadness": 1.0},
+  "BR": {"anger": 1.1, "joy": 1.2, "optimism": 1.1, "sadness": 0.9},
+  "FR": {"anger": 1.0, "joy": 1.0, "optimism": 1.0, "sadness": 1.0},
+  "AR": {"anger": 1.0, "joy": 1.0, "optimism": 1.0, "sadness": 1.0},
+  "ES": {"anger": 1.1, "joy": 1.1, "optimism": 1.0, "sadness": 0.95},
+  "CN": {"anger": 0.8, "joy": 0.9, "optimism": 1.0, "sadness": 1.0}
+}
